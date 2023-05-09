@@ -2,17 +2,127 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-    provider = "prisma-client-js"
-    previewFeatures = ["jsonProtocol"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Wallet {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  currency    Currency
+  ownerId     String
+  Transaction Transaction[]
+}
+
+model Transaction {
+  id          String    @id @default(cuid())
+  description String?
+  amount      Int
+  type        Type
+  date        DateTime  @default(now())
+  walletId    String
+  wallet      Wallet    @relation(fields: [walletId], references: [id])
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  tagId       String?
+  tag         Tag?      @relation(fields: [tagId], references: [id])
+
+  @@index([walletId], name: "walletId")
+  @@index([categoryId], name: "categoryId")
+  @@index([tagId], name: "tagId")
+}
+
+model Category {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  userId      String
+  Transaction Transaction[]
+}
+
+model Tag {
+  id          String        @id @default(cuid())
+  name        String
+  userId      String
+  Transaction Transaction[]
+}
+
+enum Type {
+  INCOME
+  EXPENSE
+}
+
+enum Currency {
+  USD
+  EUR
+  GBP
+  RUB
+  UAH
+  BYN
+  KZT
+  KGS
+  UZS
+  AZN
+  GEL
+  MDL
+  TJS
+  TMT
+  TRY
+  CNY
+  JPY
+  CHF
+  PLN
+  CZK
+  SEK
+  DKK
+  NOK
+  HUF
+  BGN
+  AUD
+  CAD
+  NZD
+  ILS
+  AED
+  SAR
+  KRW
+  INR
+  MXN
+  BRL
+  CLP
+  COP
+  ARS
+  PEN
+  VND
+  MYR
+  IDR
+  THB
+  PHP
+  SGD
+  HKD
+  ZAR
+  BDT
+  PKR
+  IQD
+  QAR
+  KWD
+  OMR
+  JOD
+  BHD
+  LBP
+  EGP
+  LKR
+  NGN
+  TZS
+  DZD
+  TND
+  MAD
+  XOF
+  XAF
 }
