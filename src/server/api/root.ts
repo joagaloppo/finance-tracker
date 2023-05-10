@@ -1,5 +1,6 @@
 import { createTRPCRouter } from "@/server/api/trpc";
 import { walletRouter } from "./routers/wallet";
+import { transactionRouter } from "./routers/transaction";
 
 
 /**
@@ -8,7 +9,8 @@ import { walletRouter } from "./routers/wallet";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  wallet: walletRouter
+  wallet: walletRouter,
+  transaction: transactionRouter,
 });
 
 // export type definition of API
