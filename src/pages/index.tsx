@@ -1,6 +1,13 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
+
 import Nav from "@/components/Nav";
+import { Button } from "@/components/ui/button";
+
+import { ArrowRight, Mail } from "lucide-react";
+import Footer from "@/components/Footer";
+import Features from "@/components/Features";
 
 const Home: NextPage = () => {
   return (
@@ -11,29 +18,33 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Nav />
-      <main className="flex min-h-screen flex-col bg-white">
-        <div className="flex w-full flex-col items-center py-48 px-4">
-          <div className="mx-auto flex w-full max-w-screen-sm flex-col items-center">
-            <h1 className="text-5xl font-extrabold tracking-tight text-slate-800">
+      <main className="flex min-h-[calc(100svh_-_137.6px)] flex-col bg-gray-50">
+        <div className="flex w-full flex-col items-center bg-white px-4 py-48">
+          <div className="mx-auto flex w-full max-w-screen-md flex-col items-center">
+            <h1 className="text-center text-5xl font-extrabold tracking-tight text-slate-800">
               Your finances, in one place
             </h1>
-            <p className="mt-4 text-xl tracking-tight text-slate-600">
-              Finance App is a simple, easy-to-use app to track your finances.
+            <p className="mt-4 text-center text-xl tracking-tight text-slate-600">
+              Financy is a simple, easy-to-use app to track your finances.
             </p>
-            <div className="flex mt-8 gap-4 w-full justify-center">
-              <button className="rounded-lg bg-slate-800 px-4 py-2 text-slate-100">
-                Get started
-              </button>
-              <button className="rounded-lg bg-slate-200 px-4 py-2 text-slate-800">
-                Learn more
-              </button>
+            <div className="mt-8 flex w-full justify-center gap-4">
+              <Link href="/dashboard">
+                <Button>
+                  Get Started <ArrowRight className="ml-3 h-4 w-4" />
+                </Button>
+              </Link>
+              <Button variant="outline">
+                Learn More
+                <Mail className="ml-3 h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
+        <Features />
       </main>
+      <Footer />
     </>
   );
 };
-
 
 export default Home;
