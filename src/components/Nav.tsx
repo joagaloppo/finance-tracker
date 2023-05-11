@@ -1,7 +1,7 @@
 import { type NextPage } from "next";
 import Link from "next/link";
 import { SignIn, SignInButton, UserButton, useUser } from "@clerk/nextjs";
-import Image from "next/image";
+import { Button } from "./ui/button";
 
 const Auth = (props: { user: boolean }) => {
   return (
@@ -13,15 +13,10 @@ const Auth = (props: { user: boolean }) => {
           afterSignUpUrl="/dashboard"
           mode="modal"
         >
-          <button
-            type="button"
-            className="mr-3 rounded-lg bg-blue-700 px-4 py-2 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 md:mr-0"
-          >
-            Get started
-          </button>
+          <Button size="sm">Sign In</Button>
         </SignInButton>
       )}
-      {props.user && <UserButton afterSignOutUrl="/" />}
+      {props.user && <UserButton showName={true} afterSignOutUrl="/" />}
     </>
   );
 };
@@ -29,20 +24,18 @@ const Auth = (props: { user: boolean }) => {
 const Nav: NextPage = () => {
   const user = useUser();
   return (
-    <nav className="w-full border-b border-gray-200 bg-white">
-      <div className="mx-auto flex max-w-screen-sm flex-wrap items-center justify-between p-4">
+    <nav className="w-full border-b">
+      <div className="mx-auto flex max-w-screen-lg flex-wrap items-center justify-between p-4 min-h-[70px]">
         <Link href="/" className="flex items-center">
-          <Image
-            about="App logo"
-            src="/bank.png"
-            className="mr-3 h-8"
-            height={32}
-            width={32}
-            alt="Flowbite Logo"
-          />
-          <span className="self-center whitespace-nowrap text-2xl font-semibold">
-            financy
-          </span>
+          <svg
+            aria-label="Vercel Logo"
+            fill="var(--geist-foreground)"
+            viewBox="0 0 75 65"
+            height="26"
+            data-testid="dashboard/logo"
+          >
+            <path d="M37.59.25l36.95 64H.64l36.95-64z"></path>
+          </svg>
         </Link>
         <div className="flex md:order-2">
           {user.isLoaded && <Auth user={user.isSignedIn} />}
@@ -52,7 +45,7 @@ const Nav: NextPage = () => {
             className="hidden w-full items-center justify-between md:order-1 md:flex md:w-auto"
             id="navbar-sticky"
           >
-            <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-white md:p-0">
+            {/* <ul className="mt-4 flex flex-col rounded-lg border border-gray-100 bg-gray-50 p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-white md:p-0">
               <li>
                 <a
                   href="#"
@@ -79,7 +72,7 @@ const Nav: NextPage = () => {
                   Contact
                 </a>
               </li>
-            </ul>
+            </ul> */}
           </div>
         )}
       </div>
