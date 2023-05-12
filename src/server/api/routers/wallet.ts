@@ -11,6 +11,12 @@ export const walletRouter = createTRPCRouter({
   //     };
   //   }),
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.wallet.findMany({ where: { ownerId: "user_2PYsIek8k5ZdFjBjL9KOnaypaI4" }});
+    const ownerId = ctx.userId;
+
+    if (!ownerId) {
+      throw new Error("User not authenticated");
+    }
+
+    return ctx.prisma.wallet.findMany({ where: { ownerId }});
   }),
 });

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { type Wallet } from "@prisma/client";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -15,30 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const wallets = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
-export default function SelectWallet() {
+export default function SelectWallet(props: { wallets: Wallet[] | undefined}) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
 
@@ -52,7 +30,7 @@ export default function SelectWallet() {
           className="w-[200px] justify-between"
         >
           {value
-            ? wallets.find((wallet) => wallet.value === value)?.label :
+            ? props.wallets && props.wallets.find((wallet) => wallet.name.toLowerCase() === value)?.name :
             "Select wallet"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -62,21 +40,21 @@ export default function SelectWallet() {
           <CommandInput placeholder="Search wallet..." />
           <CommandEmpty>No wallet found.</CommandEmpty>
           <CommandGroup>
-            {wallets.map((wallet) => (
+            {props.wallets && props.wallets.map((wallet) => (
               <CommandItem
-                key={wallet.value}
-                onSelect={(currentValue) => {
-                  setValue(currentValue === value ? "" : currentValue);
+                key={wallet.id}
+                onSelect={(selected) => {
+                  setValue(selected === value ? "" : selected);
                   setOpen(false);
                 }}
               >
                 <Check
                   className={cn(
                     "mr-2 h-4 w-4",
-                    value === wallet.value ? "opacity-100" : "opacity-0"
+                    value === wallet.name.toLowerCase() ? "opacity-100" : "opacity-0"
                   )}
                 />
-                {wallet.label}
+                {wallet.name}
               </CommandItem>
             ))}
           </CommandGroup>

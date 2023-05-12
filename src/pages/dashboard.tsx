@@ -1,35 +1,8 @@
 import { type NextPage } from "next";
-import { api } from "@/utils/api";
 import Head from "next/head";
 import Nav from "@/components/Nav";
-import ActivityTable from "@/components/ActivityTable";
 import Footer from "@/components/Footer";
-import SelectWallet from "@/components/SelectWallet";
-
-const Transactions = () => {
-  const transactions = api.transaction.getTen.useQuery().data;
-
-  return (
-    <>
-      {Array.isArray(transactions) && transactions.length && (
-        <div className="flex w-full flex-col gap-6">
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col">
-              <h2 className="inline-flex items-center text-2xl font-bold tracking-tight text-slate-800">
-                Your transactions
-              </h2>
-              <p className="text-sm text-slate-600">
-                View and manage your transactions
-              </p>
-            </div>
-            <SelectWallet />
-          </div>
-          <ActivityTable />
-        </div>
-      )}
-    </>
-  );
-};
+import DashboardComponent from "@/components/Dashboard";
 
 const Dashboard: NextPage = () => {
   return (
@@ -41,11 +14,7 @@ const Dashboard: NextPage = () => {
       </Head>
 
       <Nav />
-      <main className="flex flex-col min-h-[calc(100svh_-_140px)]">
-        <div className="mx-auto py-8 px-4 flex flex-col max-w-screen-md w-full">
-          <Transactions />
-        </div>
-      </main>
+      <DashboardComponent />
       <Footer />
     </>
   );
