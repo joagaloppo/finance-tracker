@@ -1,9 +1,10 @@
 import { api } from "@/utils/api";
 import MainTable from "./MainTable";
+import { useWalletStore } from "@/app/walletStore";
 
-const Transactions = ( props: { walletId: string; } ) => {
-
-  const { data, isLoading } = api.transaction.getTen.useQuery({ walletId: props.walletId});
+const Transactions = () => {
+  const walletId = useWalletStore((state) => state.walletId);
+  const { data, isLoading } = api.transaction.getTen.useQuery({ walletId });
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -18,7 +19,6 @@ const Transactions = ( props: { walletId: string; } ) => {
         </div>
       </div>
       <MainTable data={data} />
-      
     </div>
   );
 };

@@ -15,17 +15,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useWalletStore } from "@/app/walletStore";
 
-export default function SelectWallet(props: {
-  wallets: Wallet[];
-  setWalletId: (walletId: string) => void;
-}) {
+export default function SelectWallet(props: { wallets: Wallet[] }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(props.wallets[0]?.name.toLowerCase());
+  const setWalletId = useWalletStore((state) => state.setWalletId);
 
   useEffect(() => {
-    props.setWalletId(props.wallets[0]!.id);
-  }, [props.wallets]);
+    setWalletId(props.wallets[0]!.id);
+  }, [props.wallets, setWalletId]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -54,7 +53,7 @@ export default function SelectWallet(props: {
                   key={wallet.id}
                   onSelect={(selected) => {
                     setValue(selected);
-                    props.setWalletId(
+                    setWalletId(
                       props.wallets.find(
                         (wallet) => wallet.name.toLowerCase() === selected
                       )!.id
