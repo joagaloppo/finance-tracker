@@ -6,24 +6,28 @@ const Body = (props: { data: Transaction[] | undefined }) => {
     <div className="overflow-hidden">
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <tbody className="w-full max-w-screen-sm divide-y divide-gray-200 dark:divide-gray-700">
+          {!props.data && (
+            <tr className="w-full max-w-screen-sm bg-white">
+              <td className="overflow-hidden whitespace-nowrap px-4 py-8 text-center text-sm text-gray-800">
+                <span className="text-center">Loading...</span>
+              </td>
+            </tr>
+          )}
           {props.data && !props.data.length && (
-            <tr className="w-full max-w-screen-sm cursor-pointer bg-white hover:bg-gray-50">
-              <td className="overflow-hidden whitespace-nowrap px-4 py-4 text-sm text-gray-800">
-                <span className="text-center">
-                  Loading...
-                </span>
+            <tr className="w-full max-w-screen-sm bg-white">
+              <td className="overflow-hidden whitespace-nowrap px-4 py-8 text-center text-sm text-gray-800">
+                <span className="text-center">No transactions found</span>
               </td>
             </tr>
           )}
           {props.data &&
-            props.data.length &&
+            props.data.length > 0 &&
             props.data.map((transaction) => (
               <Row
                 key={transaction.id}
                 id={transaction.id}
                 amount={transaction.amount}
                 date={transaction.date}
-                type={transaction.type}
                 description={transaction.description}
                 onDelete={() => {
                   console.log("Deleting...");

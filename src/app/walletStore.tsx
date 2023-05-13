@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 interface WalletState {
-  walletId: string;
-  setWalletId: (id: string) => void;
+  walletId: number;
+  setWalletId: (id: number) => void;
 }
 
 export const useWalletStore = create<WalletState>()((set) => ({
-  walletId: "",
-  setWalletId: (id: string) => set(() => ({ walletId: id })),
+  walletId: 0,
+  setWalletId: (id: number) => set(() => ({ walletId: id })),
 }));

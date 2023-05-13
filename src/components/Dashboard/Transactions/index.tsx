@@ -4,7 +4,7 @@ import { useWalletStore } from "@/app/walletStore";
 
 const Transactions = () => {
   const walletId = useWalletStore((state) => state.walletId);
-  const { data, isLoading } = api.transaction.getTen.useQuery({ walletId });
+  const { data } = api.transaction.getTen.useQuery({ walletId });
 
   return (
     <div className="flex w-full flex-col gap-6">

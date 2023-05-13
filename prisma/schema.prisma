@@ -13,7 +13,7 @@ datasource db {
 }
 
 model Wallet {
-  id          String        @id @default(cuid())
+  id          Int           @id @default(autoincrement())
   name        String
   description String?
   currency    Currency
@@ -22,16 +22,15 @@ model Wallet {
 }
 
 model Transaction {
-  id          String    @id @default(cuid())
-  description String?
-  amount      Int
-  type        Type
+  id          Int       @id @default(autoincrement())
+  amount      Float
   date        DateTime  @default(now())
-  walletId    String
+  description String?
+  walletId    Int
   wallet      Wallet    @relation(fields: [walletId], references: [id])
-  categoryId  String?
+  categoryId  Int?
   category    Category? @relation(fields: [categoryId], references: [id])
-  tagId       String?
+  tagId       Int?
   tag         Tag?      @relation(fields: [tagId], references: [id])
 
   @@index([walletId], name: "walletId")
@@ -40,7 +39,7 @@ model Transaction {
 }
 
 model Category {
-  id          String        @id @default(cuid())
+  id          Int           @id @default(autoincrement())
   name        String
   description String?
   userId      String
@@ -48,15 +47,10 @@ model Category {
 }
 
 model Tag {
-  id          String        @id @default(cuid())
+  id          Int           @id @default(autoincrement())
   name        String
   userId      String
   Transaction Transaction[]
-}
-
-enum Type {
-  INCOME
-  EXPENSE
 }
 
 enum Currency {

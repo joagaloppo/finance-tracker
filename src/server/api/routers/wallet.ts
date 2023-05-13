@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
-import { Input } from "postcss";
 
 export const walletRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
@@ -14,7 +13,7 @@ export const walletRouter = createTRPCRouter({
     return ctx.prisma.wallet.findMany({ where: { ownerId } });
   }),
   getBalance: publicProcedure
-    .input(z.object({ walletId: z.string() }))
+    .input(z.object({ walletId: z.number() }))
     .query(({ ctx, input }) => {
       const ownerId = ctx.userId;
 
