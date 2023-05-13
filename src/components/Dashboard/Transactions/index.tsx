@@ -1,8 +1,9 @@
 import { api } from "@/utils/api";
 import MainTable from "./MainTable";
 
-const Transactions = () => {
-  const { data, isLoading } = api.transaction.getTen.useQuery();
+const Transactions = ( props: { walletId: string; } ) => {
+
+  const { data, isLoading } = api.transaction.getTen.useQuery({ walletId: props.walletId});
 
   return (
     <div className="flex w-full flex-col gap-6">
@@ -17,6 +18,7 @@ const Transactions = () => {
         </div>
       </div>
       <MainTable data={data} />
+      
     </div>
   );
 };

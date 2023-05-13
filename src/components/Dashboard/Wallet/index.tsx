@@ -1,7 +1,7 @@
 import { api } from "@/utils/api";
 import SelectWallet from "@/components/Dashboard/Wallet/SelectWallet";
 
-const Transactions = () => {
+const Transactions = (props: { setWalletId: (walletId: string) => void }) => {
   const { data, isLoading } = api.wallet.getAll.useQuery();
 
   return (
@@ -15,7 +15,9 @@ const Transactions = () => {
             Select a wallet to view its transactions
           </p>
         </div>
-        <SelectWallet wallets={data}/>
+        { !isLoading && data && (
+        <SelectWallet wallets={data} setWalletId={props.setWalletId} />
+        )}
       </div>
     </div>
   );

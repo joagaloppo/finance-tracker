@@ -6,7 +6,7 @@ const Body = (props: { data: Transaction[] | undefined }) => {
     <div className="overflow-hidden">
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <tbody className="w-full max-w-screen-sm divide-y divide-gray-200 dark:divide-gray-700">
-          {!props.data && (
+          {props.data && !props.data.length && (
             <tr className="w-full max-w-screen-sm cursor-pointer bg-white hover:bg-gray-50">
               <td className="overflow-hidden whitespace-nowrap px-4 py-4 text-sm text-gray-800">
                 <span className="text-center">
