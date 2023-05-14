@@ -1,29 +1,30 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 
 export const walletRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    const ownerId = ctx.userId;
-
-    if (!ownerId) {
-      throw new Error("User not authenticated");
-    }
-
-    return ctx.prisma.wallet.findMany({ where: { ownerId } });
+  getAll: privateProcedure.query(({ ctx }) => {
+    return ctx.prisma.wallet.findMany({ where: { ownerId: ctx.userId } });
   }),
   getBalance: publicProcedure
     .input(z.object({ walletId: z.number() }))
-    .query(({ ctx, input }) => {
-      const ownerId = ctx.userId;
-
-      if (!ownerId) {
-        throw new Error("User not authenticated");
-      }
-
-      return ctx.prisma.transaction.aggregate({
-        where: { walletId: input.walletId },
-        _sum: { amount: true },
+    .query(async ({ ctx, input }) => {
+      const wallet = await ctx.prisma.wallet.findUnique({
+        where: { id: input.walletId },
       });
+      if (!wallet) throw new Error("Wallet not found");
+
+      const balance = await ctx.prisma.transaction
+        .aggregate({
+          where: { walletId: input.walletId },
+          _sum: { amount: true },
+        })
+        .then((res) => res._sum.amount ?? 0);
+
+      return { balance, wallet };
     }),
 });

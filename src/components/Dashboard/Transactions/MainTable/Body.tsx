@@ -4,21 +4,23 @@ import type { Transaction } from "@prisma/client";
 const Body = (props: { data: Transaction[] | undefined }) => {
   return (
     <div className="overflow-hidden">
-      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <tbody className="w-full max-w-screen-sm divide-y divide-gray-200 dark:divide-gray-700">
+      <div className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <div className="w-full divide-y divide-gray-200 dark:divide-gray-700">
           {!props.data && (
-            <tr className="w-full max-w-screen-sm bg-white">
-              <td className="overflow-hidden whitespace-nowrap px-4 py-8 text-center text-sm text-gray-800">
+            <div className="w-full bg-white">
+              <div className="overflow-hidden whitespace-nowrap px-4 py-14 text-center text-sm text-gray-800">
                 <span className="text-center">Loading...</span>
-              </td>
-            </tr>
+              </div>
+            </div>
           )}
           {props.data && !props.data.length && (
-            <tr className="w-full max-w-screen-sm bg-white">
-              <td className="overflow-hidden whitespace-nowrap px-4 py-8 text-center text-sm text-gray-800">
-                <span className="text-center">No transactions found</span>
-              </td>
-            </tr>
+            <div className="w-full bg-white">
+              <div className="overflow-hidden whitespace-nowrap px-4 py-14 text-center text-sm text-gray-800">
+                <span className="block text-center">
+                  No transactions found.
+                </span>
+              </div>
+            </div>
           )}
           {props.data &&
             props.data.length > 0 &&
@@ -34,8 +36,8 @@ const Body = (props: { data: Transaction[] | undefined }) => {
                 }}
               />
             ))}
-        </tbody>
-      </table>
+        </div>
+      </div>
     </div>
   );
 };

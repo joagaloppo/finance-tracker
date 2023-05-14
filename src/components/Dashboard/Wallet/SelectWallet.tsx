@@ -31,9 +31,10 @@ export default function SelectWallet(props: { wallets: Wallet[] }) {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
+          size="sm"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[160px] justify-between sm:w-[200px]"
         >
           {value &&
             props.wallets &&
@@ -42,7 +43,7 @@ export default function SelectWallet(props: { wallets: Wallet[] }) {
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[160px] p-0 sm:w-[200px]">
         <Command>
           <CommandInput placeholder="Search wallet..." />
           <CommandEmpty>No wallet found.</CommandEmpty>
