@@ -44,7 +44,6 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import { getAuth } from "@clerk/nextjs/dist/server-helpers.server";
-import { authMiddleware } from "@clerk/nextjs";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,

@@ -1,24 +1,45 @@
 import { api } from "@/utils/api";
-import SelectWallet from "@/components/Dashboard/Wallet/SelectWallet";
-import Card from "./Card";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { useWalletStore } from "@/app/walletStore";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
-const Transactions = () => {
-  const { data, isLoading } = api.wallet.getAll.useQuery();
+import Modal from "@/components/Dashboard/Wallet/Modal";
+
+const Cardy = () => {
+  const walletId = useWalletStore((state) => state.walletId);
+  const { data, isLoading } = api.wallet.getBalance.useQuery({ walletId });
 
   return (
-    <div className="flex w-full flex-col gap-4">
-      <div className="flex items-center justify-between gap-2">
-        {!isLoading && data ? <SelectWallet wallets={data} /> : <div />}
-        <Button variant="outline" size="sm">
-          <Plus className="mr-2 h-3.5 w-3.5" />
-          Add wallet
-        </Button>
-      </div>
-      <Card />
-    </div>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center gap-2">
+          <CardTitle>Available balance</CardTitle>
+          <span className="w-fit rounded-lg bg-slate-400 px-[6px] text-[10px] tracking-tight text-white">
+            {data?.wallet?.currency ? `${data.wallet.currency}` : null}
+          </span>
+        </div>
+        <CardDescription>
+          {data?.wallet?.name ? `Your money in ${data.wallet.name}.` : `Your money is loading...`}
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <h2 className="text-2xl font-bold tracking-tight text-slate-800">
+          {data?.balance && data.balance < 0 ? "-" : ""}{" "}
+          {isLoading && "..."}
+          {!isLoading && `$ ${Math.abs(data?.balance || 0) }`}
+        </h2>
+      </CardContent>
+      <CardFooter>
+        <Modal />
+      </CardFooter>
+    </Card>
   );
 };
 
-export default Transactions;
+export default Cardy;

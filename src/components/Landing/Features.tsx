@@ -22,7 +22,7 @@ const data = [
 ];
 
 const Feature = (props: {
-  icon?: any;
+  icon?: React.ReactNode;
   title?: string;
   description?: string;
 }) => {

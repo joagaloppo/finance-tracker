@@ -2,7 +2,6 @@ import { Search } from "lucide-react";
 
 const Header = (props: { setSearch: (value: string) => void }) => {
   return (
-    <div className="px-4 py-3">
       <div className="relative flex w-full items-center">
         <div className="relative w-full">
           <label htmlFor="hs-table-with-pagination-search" className="sr-only">
@@ -23,7 +22,6 @@ const Header = (props: { setSearch: (value: string) => void }) => {
           <Search className="h-3.5 w-3.5 text-gray-400" />
         </div>
       </div>
-    </div>
   );
 };
 

@@ -2,8 +2,7 @@ import { Button } from "@/components/ui/button";
 
 const Footer = () => {
   return (
-    <div className="px-4 py-2">
-      <nav className="flex items-center justify-center gap-2 text-slate-500">
+      <nav className="flex gap-2 text-slate-500 p-2">
         <Button variant="ghost" size="sm">
           <span aria-hidden="true">«</span>
           <span className="sr-only">Previous</span>
@@ -22,7 +21,6 @@ const Footer = () => {
           <span aria-hidden="true">»</span>
         </Button>
       </nav>
-    </div>
   );
 };
 

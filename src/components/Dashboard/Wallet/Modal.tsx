@@ -18,7 +18,7 @@ import { Text } from "lucide-react";
 import { DollarSign } from "lucide-react";
 import { useState } from "react";
 
-export default function AddTransaction() {
+export default function Modal() {
   const walletId = useWalletStore((state) => state.walletId);
   const [description, setDescription] = useState<string>("");
   const [amount, setAmount] = useState<string>("");

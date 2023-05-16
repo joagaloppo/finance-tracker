@@ -5,10 +5,9 @@ const Row = (props: {
   description: string | null;
   amount: number;
   date: Date;
-  onDelete: (id: string) => void;
 }) => {
   return (
-    <div className="flex w-full cursor-pointer gap-3 bg-white px-3 py-5 hover:bg-gray-50">
+    <div className="flex w-full cursor-pointer gap-3 bg-white px-3 py-5 hover:bg-gray-100">
       <div className="whitespace-nowrap text-sm text-gray-800">
         <span className="inline-flex h-[46px] w-[46px] items-center justify-center rounded-full border border-gray-300">
           {props.amount >= 0 ? (
