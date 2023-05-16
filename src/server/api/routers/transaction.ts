@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from "@/server/api/trpc";
 
 export const transactionRouter = createTRPCRouter({
   getTen: publicProcedure
@@ -11,5 +15,26 @@ export const transactionRouter = createTRPCRouter({
         take: 10,
         orderBy: { date: "desc" },
       });
+    }),
+  create: privateProcedure
+    .input(
+      z.object({
+        description: z.string(),
+        amount: z.number(),
+        date: z.date(),
+        walletId: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const transaction = await ctx.prisma.transaction.create({
+        data: {
+          description: input.description,
+          amount: input.amount,
+          date: input.date,
+          walletId: input.walletId,
+        },
+      });
+
+      return transaction;
     }),
 });

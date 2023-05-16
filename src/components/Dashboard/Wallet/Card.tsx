@@ -1,6 +1,7 @@
 import { api } from "@/utils/api";
 import { useWalletStore } from "@/app/walletStore";
 import { Button } from "@/components/ui/button";
+import Modal from './Modal';
 
 const Card = () => {
   const walletId = useWalletStore((state) => state.walletId);
@@ -22,12 +23,7 @@ const Card = () => {
           {data?.balance ? Math.abs(data.balance) : 0}
         </h2>
         <div className="flex w-full gap-2">
-          <Button variant="outline" size="sm" className="w-full">
-            Deposit
-          </Button>
-          <Button variant="outline" size="sm" className="w-full">
-            Withdraw
-          </Button>
+          <Modal/>
         </div>
       </div>
     </div>
