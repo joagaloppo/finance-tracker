@@ -5,6 +5,7 @@ import {
   privateProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
+import { Currency } from "@prisma/client";
 
 export const walletRouter = createTRPCRouter({
   getAll: privateProcedure.query(({ ctx }) => {
@@ -26,5 +27,25 @@ export const walletRouter = createTRPCRouter({
         .then((res) => res._sum.amount ?? 0);
 
       return { balance, wallet };
+    }),
+  create: privateProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        description: z.string(),
+        currency: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const transaction = await ctx.prisma.wallet.create({
+        data: {
+          name: input.name,
+          description: input.description,
+          currency: Currency[input.currency as keyof typeof Currency],
+          ownerId: ctx.userId,
+        },
+      });
+
+      return transaction;
     }),
 });

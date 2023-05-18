@@ -99,7 +99,7 @@ export default function Modal() {
             <div className="relative flex w-fit items-center">
               <div className="relative flex items-center rounded-lg border divide-x">
                 <Input
-                  className="w-[80px] rounded-none border-0 pl-10 text-center"
+                  className="w-[70px] rounded-none border-0 pl-8 pr-3 text-right"
                   maxLength={2}
                   value={date?.getHours() || ""}
                   onChange={(e) =>
@@ -111,7 +111,7 @@ export default function Modal() {
                   }
                 />
                 <Input
-                  className="w-[50px] rounded-none border-0 px-0 text-center"
+                  className="w-[40px] rounded-none border-0 px-0 text-center"
                   maxLength={2}
                   value={date?.getMinutes() || ""}
                   onChange={(e) =>
