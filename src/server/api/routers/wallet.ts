@@ -1,33 +1,27 @@
 import { z } from "zod";
 
-import {
-  createTRPCRouter,
-  privateProcedure,
-  publicProcedure,
-} from "@/server/api/trpc";
+import { createTRPCRouter, privateProcedure, publicProcedure } from "@/server/api/trpc";
 import { Currency } from "@prisma/client";
 
 export const walletRouter = createTRPCRouter({
   getAll: privateProcedure.query(({ ctx }) => {
     return ctx.prisma.wallet.findMany({ where: { ownerId: ctx.userId } });
   }),
-  getBalance: publicProcedure
-    .input(z.object({ walletId: z.number() }))
-    .query(async ({ ctx, input }) => {
-      const wallet = await ctx.prisma.wallet.findUnique({
-        where: { id: input.walletId },
-      });
-      if (!wallet) throw new Error("Wallet not found");
+  getBalance: publicProcedure.input(z.object({ walletId: z.number() })).query(async ({ ctx, input }) => {
+    const wallet = await ctx.prisma.wallet.findUnique({
+      where: { id: input.walletId },
+    });
+    if (!wallet) throw new Error("Wallet not found");
 
-      const balance = await ctx.prisma.transaction
-        .aggregate({
-          where: { walletId: input.walletId },
-          _sum: { amount: true },
-        })
-        .then((res) => res._sum.amount ?? 0);
+    const balance = await ctx.prisma.transaction
+      .aggregate({
+        where: { walletId: input.walletId },
+        _sum: { amount: true },
+      })
+      .then((res) => res._sum.amount ?? 0);
 
-      return { balance, wallet };
-    }),
+    return { balance, wallet };
+  }),
   create: privateProcedure
     .input(
       z.object({
@@ -44,6 +38,40 @@ export const walletRouter = createTRPCRouter({
           currency: Currency[input.currency as keyof typeof Currency],
           ownerId: ctx.userId,
         },
+      });
+
+      return transaction;
+    }),
+  edit: privateProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.optional(z.string()),
+        description: z.optional(z.string()),
+        currency: z.optional(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const transaction = await ctx.prisma.wallet.update({
+        where: { id: input.id },
+        data: {
+          name: input.name,
+          description: input.description,
+          currency: Currency[input.currency as keyof typeof Currency],
+        },
+      });
+
+      return transaction;
+    }),
+  delete: privateProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const transaction = await ctx.prisma.wallet.delete({
+        where: { id: input.id },
       });
 
       return transaction;

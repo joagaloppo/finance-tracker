@@ -1,13 +1,6 @@
 import { api } from "@/utils/api";
 import { useWalletStore } from "@/app/walletStore";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 import Modal from "@/components/Dashboard/Wallet/Modal";
 
@@ -30,9 +23,8 @@ const Cardy = () => {
       </CardHeader>
       <CardContent>
         <h2 className="text-2xl font-bold tracking-tight text-slate-800">
-          {data?.balance && data.balance < 0 ? "-" : ""}{" "}
-          {isLoading && "..."}
-          {!isLoading && `$ ${Math.abs(data?.balance || 0) }`}
+          {data?.balance && data.balance < 0 ? "-" : ""} {isLoading && "$ --"}
+          {!isLoading && `$ ${Math.abs(data?.balance || 0)}`}
         </h2>
       </CardContent>
       <CardFooter>
