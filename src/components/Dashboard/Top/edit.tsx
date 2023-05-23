@@ -108,7 +108,7 @@ export default function EditWallet() {
                 exit="exit"
                 transition={{ duration: 0.15, type: "just" }}
                 variants={variants}
-                className="fixed left-1/2 top-[4vw] z-50 flex w-[96vw] max-w-lg -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg sm:top-1/2"
+                className="fixed left-1/2 top-[2vw] z-50 flex w-[96vw] max-w-lg -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg sm:top-1/2"
               >
                 <div className="flex flex-col space-y-1.5 text-left">
                   <Dialog.Title className="text-lg font-semibold leading-none tracking-tight">Settings</Dialog.Title>
