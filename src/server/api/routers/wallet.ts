@@ -70,10 +70,9 @@ export const walletRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const transaction = await ctx.prisma.wallet.delete({
-        where: { id: input.id },
-      });
+      await ctx.prisma.transaction.deleteMany({ where: { walletId: input.id } });
+      const deleted = await ctx.prisma.wallet.delete({ where: { id: input.id } });
 
-      return transaction;
+      return deleted;
     }),
 });

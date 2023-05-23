@@ -94,7 +94,7 @@ export default function EditWallet() {
           <Dialog.Portal forceMount>
             <Dialog.Overlay asChild forceMount>
               <motion.div
-                className="fixed inset-0 z-50 cursor-pointer bg-black/20 backdrop-blur-sm"
+                className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -150,7 +150,7 @@ export default function EditWallet() {
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-4 sm:flex-row sm:justify-end sm:space-x-2">
+                <div className="flex flex-col gap-4 sm:flex-row sm:justify-end sm:gap-2 sm:space-x-2">
                   <DeleteWallet setOpenParent={setOpen} />
                   <Button
                     type="submit"

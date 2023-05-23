@@ -6,19 +6,16 @@ import { api } from "@/utils/api";
 import { useWalletStore } from "@/app/walletStore";
 import { motion, AnimatePresence } from "framer-motion";
 
-import SelectCurrency from "./selectCurrency";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Text, Hash, Plus, X } from "lucide-react";
+import { X } from "lucide-react";
 import { type Wallet } from "@prisma/client";
 
-export default function AddWallet() {
+export default function DeleteWallet(props: { setOpenParent: (o: boolean) => void }) {
   const [open, setOpen] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [currency, setCurrency] = useState<string>("USD");
 
-  const addWallet = useWalletStore((state) => state.addWallet);
+  const wallets = useWalletStore((state) => state.wallets);
+  const walletId = useWalletStore((state) => state.walletId);
+  const setWallets = useWalletStore((state) => state.setWallets);
   const setWalletId = useWalletStore((state) => state.setWalletId);
 
   let variants = {
@@ -35,17 +32,12 @@ export default function AddWallet() {
     };
   }
 
-  const resetInputs = () => {
-    setTitle("");
-    setDescription("");
-    setCurrency("usd");
-  };
-
-  const { mutate, isLoading } = api.wallet.create.useMutation({
+  const { mutate, isLoading } = api.wallet.delete.useMutation({
     onSuccess: (data: Wallet) => {
       setOpen(false);
-      addWallet(data);
-      setWalletId(data.id);
+      props.setOpenParent(false);
+      setWallets(wallets.filter((wallet) => wallet.id !== data.id));
+      setWalletId(wallets[0]?.id || 0);
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;
@@ -62,13 +54,10 @@ export default function AddWallet() {
       open={open}
       onOpenChange={() => {
         setOpen(!open);
-        resetInputs();
       }}
     >
       <Dialog.Trigger asChild>
-        <Button variant="outline" size="sm" className="sm:after:content-['Create']">
-          <Plus className="h-3.5 w-3.5 text-slate-700 sm:mr-2" />
-        </Button>
+        <Button variant="outline">Delete wallet</Button>
       </Dialog.Trigger>
 
       <AnimatePresence>
@@ -93,57 +82,25 @@ export default function AddWallet() {
                 className="fixed left-1/2 top-[4vw] z-50 flex w-[96vw] max-w-lg -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg sm:top-1/2"
               >
                 <div className="flex flex-col space-y-1.5 text-left">
-                  <Dialog.Title className="text-lg font-semibold leading-none tracking-tight">Create</Dialog.Title>
-                  <Dialog.Description className="text-sm text-muted-foreground">Add a new wallet.</Dialog.Description>
+                  <Dialog.Title className="text-lg font-semibold leading-none tracking-tight">Delete</Dialog.Title>
+                  <Dialog.Description className="text-sm text-muted-foreground">
+                    Are you sure you want to delete this wallet?
+                  </Dialog.Description>
                 </div>
 
-                <div className="grid gap-4 py-4">
-                  <div className="flex gap-2">
-                    <div className="relative flex w-full items-center">
-                      <div className="relative w-full">
-                        <Input
-                          spellCheck={false}
-                          placeholder="Name"
-                          className="pl-10"
-                          value={title}
-                          onChange={(e) => setTitle(e.target.value)}
-                        />
-                      </div>
-                      <div className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center pl-1">
-                        <Hash className="h-3.5 w-3.5 text-slate-500" />
-                      </div>
-                    </div>
-                    <SelectCurrency value={currency} setValue={setCurrency} />
-                  </div>
-
-                  <div className="relative flex w-full items-center">
-                    <div className="relative w-full">
-                      <Input
-                        spellCheck={false}
-                        className="pl-10"
-                        placeholder="Description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                      />
-                    </div>
-                    <div className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center pl-1">
-                      <Text className="h-3.5 w-3.5 text-slate-500" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+                <div className="flex flex-col gap-4 sm:flex-row sm:justify-end sm:gap-2 sm:space-x-2">
+                  <Button type="submit" variant="outline" onClick={() => setOpen(!open)}>
+                    Cancel
+                  </Button>
                   <Button
                     type="submit"
                     onClick={() =>
                       mutate({
-                        name: title,
-                        description,
-                        currency: currency.toUpperCase(),
+                        id: walletId,
                       })
                     }
                   >
-                    {isLoading ? "Loading..." : "Create"}
+                    {isLoading ? "Loading..." : "Delete"}
                   </Button>
                 </div>
 
