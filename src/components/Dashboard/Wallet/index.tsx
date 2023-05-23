@@ -14,18 +14,19 @@ const Cardy = () => {
       <CardHeader>
         <div className="flex items-center gap-2">
           <CardTitle>Available balance</CardTitle>
-          <span className="w-fit rounded-lg bg-slate-400 px-[6px] text-[10px] tracking-tight text-white">
+          <span className="w-fit rounded-2xl bg-blue-800 px-[6px] text-[10px] tracking-tight text-white opacity-60">
             {data?.wallet?.currency ? `${data.wallet.currency}` : null}
           </span>
         </div>
         <CardDescription>
-          {data?.wallet?.name ? `Your money in ${data.wallet.name}.` : `Your money is loading...`}
+          {data?.wallet?.name ? `Your money in ${data.wallet.name.toLowerCase()}.` : `Your money is loading...`}
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <h2 className={cn("text-2xl font-bold tracking-tight text-slate-800", isLoading && "animate-pulse opacity-80")}>
-          {data?.balance && data.balance < 0 ? "-" : ""} {isLoading && "$ "}
-          {!isLoading && `$ ${Math.abs(data?.balance || 0).toLocaleString("en-US") || 0}`}
+        <h2 className={cn("text-2xl font-bold text-slate-800", isLoading && "animate-pulse opacity-80")}>
+          {data?.balance && data.balance < 0 ? "-" : ""}
+          {isLoading && "$--"}
+          {!isLoading && `$${Math.abs(data?.balance || 0).toLocaleString("en-US") || 0}`}
         </h2>
       </CardContent>
       <CardFooter>
