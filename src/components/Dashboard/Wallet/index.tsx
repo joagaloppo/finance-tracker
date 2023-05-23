@@ -2,7 +2,7 @@ import { api } from "@/utils/api";
 import { useWalletStore } from "@/app/walletStore";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-import Modal from "@/components/Dashboard/Wallet/Modal";
+import Add from "@/components/Dashboard/Wallet/add";
 import { cn } from "@/lib/utils";
 
 const Cardy = () => {
@@ -29,7 +29,7 @@ const Cardy = () => {
         </h2>
       </CardContent>
       <CardFooter>
-        <Modal />
+        <Add />
       </CardFooter>
     </Card>
   );
