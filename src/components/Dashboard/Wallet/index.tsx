@@ -3,6 +3,7 @@ import { useWalletStore } from "@/app/walletStore";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 import Modal from "@/components/Dashboard/Wallet/Modal";
+import { cn } from "@/lib/utils";
 
 const Cardy = () => {
   const walletId = useWalletStore((state) => state.walletId);
@@ -22,9 +23,9 @@ const Cardy = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <h2 className="text-2xl font-bold tracking-tight text-slate-800">
-          {data?.balance && data.balance < 0 ? "-" : ""} {isLoading && "$ --"}
-          {!isLoading && `$ ${Math.abs(data?.balance || 0)}`}
+        <h2 className={cn("text-2xl font-bold tracking-tight text-slate-800", isLoading && "animate-pulse opacity-80")}>
+          {data?.balance && data.balance < 0 ? "-" : ""} {isLoading && "$ "}
+          {!isLoading && `$ ${data?.balance.toLocaleString("en-US") || 0}`}
         </h2>
       </CardContent>
       <CardFooter>

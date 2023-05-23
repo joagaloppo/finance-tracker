@@ -1,9 +1,10 @@
 import { api } from "@/utils/api";
-import Select from "./select";
 import { useEffect } from "react";
 import { useWalletStore } from "@/app/walletStore";
-import AddWallet from "./addWallet";
-import EditWallet from "./editWallet";
+
+import Select from "./select";
+import Add from "./add";
+import Edit from "./edit";
 
 const Top = () => {
   const { data, isLoading } = api.wallet.getAll.useQuery();
@@ -26,8 +27,8 @@ const Top = () => {
     <div className="flex items-center justify-between gap-2">
       <Select />
       <div className="flex gap-2">
-        <AddWallet />
-        <EditWallet />
+        <Add />
+        <Edit />
       </div>
     </div>
   );
