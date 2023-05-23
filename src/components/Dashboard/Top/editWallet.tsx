@@ -63,8 +63,8 @@ export default function EditWallet() {
 
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Wallet</DialogTitle>
-          <DialogDescription>Add a wallet linked to your account.</DialogDescription>
+          <DialogTitle>Settings</DialogTitle>
+          <DialogDescription>Edit your wallet.</DialogDescription>
         </DialogHeader>
 
         <div className="grid gap-4 py-4">
