@@ -4,9 +4,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 
 import Add from "@/components/Dashboard/Wallet/add";
 import { cn } from "@/lib/utils";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const Cardy = () => {
   const walletId = useWalletStore((state) => state.walletId);
+  const [showBalance, setShowBalance] = useState(true);
   const { data, isLoading } = api.wallet.getBalance.useQuery({ walletId });
 
   return (
@@ -26,7 +29,22 @@ const Cardy = () => {
         <h2 className={cn("text-2xl font-bold text-slate-800", isLoading && "animate-pulse opacity-80")}>
           {data?.balance && data.balance < 0 ? "-" : ""}
           {isLoading && "$--"}
-          {!isLoading && `$${Math.abs(data?.balance || 0).toLocaleString("en-US") || 0}`}
+          {!isLoading && (showBalance ? `$${Math.abs(data?.balance || 0).toLocaleString("en-US")} ` : `$---`)}
+
+          {!isLoading &&
+            (showBalance ? (
+              <Eye
+                className="ml-2 inline-block cursor-pointer"
+                onClick={() => setShowBalance(!showBalance)}
+                size={18}
+              />
+            ) : (
+              <EyeOff
+                className="ml-3 inline-block cursor-pointer"
+                onClick={() => setShowBalance(!showBalance)}
+                size={18}
+              />
+            ))}
         </h2>
       </CardContent>
       <CardFooter>

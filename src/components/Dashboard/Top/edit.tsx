@@ -85,7 +85,7 @@ export default function EditWallet() {
           size="sm"
           className="sm:after:content-['Settings']"
         >
-          <Settings className="h-3.5 w-3.5 text-slate-700 sm:mr-2" />
+          <Settings className="h-4 w-auto sm:mr-2" />
         </Button>
       </Dialog.Trigger>
 

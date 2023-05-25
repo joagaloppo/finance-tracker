@@ -67,7 +67,7 @@ export default function AddWallet() {
     >
       <Dialog.Trigger asChild>
         <Button variant="outline" size="sm" className="sm:after:content-['Create']">
-          <Plus className="h-3.5 w-3.5 text-slate-700 sm:mr-2" />
+          <Plus className="h-4 w-auto sm:mr-2" />
         </Button>
       </Dialog.Trigger>
 
