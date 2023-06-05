@@ -24,12 +24,14 @@ import { prisma } from "@/server/db";
  *
  * @see https://trpc.io/docs/context
  */
-export const createTRPCContext = (opts: CreateNextContextOptions) => {
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const req = opts.req;
-  const { userId } = getAuth(req);
+  const res = opts.res;
+  const session = await getServerSession(req, res, authOptions);
+
   return {
     prisma,
-    userId,
+    userId: session?.user.id,
   };
 };
 
@@ -43,7 +45,8 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
 import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { getAuth } from "@clerk/nextjs/dist/server-helpers.server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth";
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -52,8 +55,7 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
       ...shape,
       data: {
         ...shape.data,
-        zodError:
-          error.cause instanceof ZodError ? error.cause.flatten() : null,
+        zodError: error.cause instanceof ZodError ? error.cause.flatten() : null,
       },
     };
   },

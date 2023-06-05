@@ -3,7 +3,7 @@ import { type NextPage } from "next";
 const Footer: NextPage = () => {
   return (
     <footer className="w-full border-t">
-      <div className="min-h-[70px] w-full max-w-screen-lg p-4 text-center sm:flex sm:items-center sm:justify-between sm:p-6">
+      <div className="mx-auto min-h-[50px] w-full max-w-screen-lg p-4 text-center sm:flex sm:items-center sm:justify-between sm:p-6">
         <span className="text-sm text-gray-500">
           © 2023 -{" "}
           <a href="https://flowbite.com/" className="hover:underline">

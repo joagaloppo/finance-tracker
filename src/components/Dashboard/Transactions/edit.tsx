@@ -112,7 +112,7 @@ export default function EditTransaction(props: { transaction: Transaction }) {
                   transaction.amount >= 0 ? "text-green-700" : "text-red-700"
                 )}
               >
-                {transaction.amount >= 0 ? "+" : "-"} $ {Math.abs(transaction.amount)}
+                {transaction.amount >= 0 ? "+" : "-"}${Math.abs(transaction.amount).toLocaleString("en-US")}
               </span>
               <span className="text-xs font-light tracking-tight text-gray-400">
                 {transaction.date.toLocaleDateString()}
