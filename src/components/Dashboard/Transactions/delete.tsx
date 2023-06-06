@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import Spinner from "@/components/ui/spinner";
 
 export default function DeleteTransaction(props: { setOpenParent: (o: boolean) => void; id: number }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -36,7 +37,7 @@ export default function DeleteTransaction(props: { setOpenParent: (o: boolean) =
       props.setOpenParent(false);
       setTransactions(transactions.filter((t) => t.id !== props.id));
       void ctx.transaction.getTen.invalidate();
-      void ctx.wallet.getBalance.invalidate();
+      void ctx.wallet.getInfo.invalidate();
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;
@@ -99,7 +100,7 @@ export default function DeleteTransaction(props: { setOpenParent: (o: boolean) =
                       })
                     }
                   >
-                    {isLoading ? "Loading..." : "Delete"}
+                    {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Delete"}
                   </Button>
                 </div>
 

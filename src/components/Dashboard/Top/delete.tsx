@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import { type Wallet } from "@prisma/client";
+import Spinner from "@/components/ui/spinner";
 
 export default function DeleteWallet(props: { setOpenParent: (o: boolean) => void }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -100,7 +101,7 @@ export default function DeleteWallet(props: { setOpenParent: (o: boolean) => voi
                       })
                     }
                   >
-                    {isLoading ? "Loading..." : "Delete"}
+                    {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Delete"}
                   </Button>
                 </div>
 

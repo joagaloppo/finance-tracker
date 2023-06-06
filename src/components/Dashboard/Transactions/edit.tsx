@@ -12,6 +12,7 @@ import { DollarSign, Text, Clock, X, ArrowRight, ArrowLeft } from "lucide-react"
 import { cn } from "@/lib/utils";
 import { type Transaction } from "@prisma/client";
 import DeleteTransaction from "./delete";
+import Spinner from "@/components/ui/spinner";
 
 export default function EditTransaction(props: { transaction: Transaction }) {
   const { transaction } = props;
@@ -65,7 +66,7 @@ export default function EditTransaction(props: { transaction: Transaction }) {
           })
         );
       void ctx.transaction.getTen.invalidate();
-      void ctx.wallet.getBalance.invalidate();
+      void ctx.wallet.getInfo.invalidate();
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;
@@ -243,7 +244,7 @@ export default function EditTransaction(props: { transaction: Transaction }) {
                       })
                     }
                   >
-                    {isLoading ? "Loading..." : "Save"}
+                    {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Save"}
                   </Button>
                 </div>
 

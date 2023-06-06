@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Settings, X, Hash, Text } from "lucide-react";
 import { type Wallet } from "@prisma/client";
 import DeleteWallet from "./delete";
+import Spinner from "@/components/ui/spinner";
 
 export default function EditWallet() {
   const [open, setOpen] = useState<boolean>(false);
@@ -48,7 +49,7 @@ export default function EditWallet() {
   const { mutate, isLoading } = api.wallet.edit.useMutation({
     onSuccess: async () => {
       setOpen(false);
-      await ctx.wallet.getBalance.invalidate();
+      await ctx.wallet.getInfo.invalidate();
       setWallets(
         wallets.map((wallet: Wallet) => {
           if (wallet.id === walletId) {
@@ -163,7 +164,7 @@ export default function EditWallet() {
                       })
                     }
                   >
-                    {isLoading ? "Loading..." : "Save"}
+                    {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Save"}
                   </Button>
                 </div>
 

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Text, Hash, Plus, X } from "lucide-react";
 import { type Wallet } from "@prisma/client";
+import Spinner from "@/components/ui/spinner";
 
 export default function AddWallet() {
   const [open, setOpen] = useState<boolean>(false);
@@ -143,7 +144,7 @@ export default function AddWallet() {
                       })
                     }
                   >
-                    {isLoading ? "Loading..." : "Create"}
+                    {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Create"}
                   </Button>
                 </div>
 

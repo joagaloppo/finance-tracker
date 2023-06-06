@@ -10,7 +10,7 @@ import { useState } from "react";
 const Cardy = () => {
   const walletId = useWalletStore((state) => state.walletId);
   const [showBalance, setShowBalance] = useState(true);
-  const { data, isLoading } = api.wallet.getBalance.useQuery({ walletId });
+  const { data, isLoading } = api.wallet.getInfo.useQuery({ walletId });
 
   return (
     <Card>
@@ -26,24 +26,21 @@ const Cardy = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <h2 className={cn("text-2xl font-bold text-slate-800", isLoading && "animate-pulse opacity-80")}>
+        <h2
+          className={cn(
+            "flex items-center gap-2 text-2xl font-bold text-slate-800",
+            isLoading && "animate-pulse opacity-80"
+          )}
+        >
           {data?.balance && data.balance < 0 ? "-" : ""}
-          {isLoading && "$ ---"}
-          {!isLoading && (showBalance ? `$${Math.abs(data?.balance || 0).toLocaleString("en-US")} ` : `$ ---`)}
+          {isLoading && "$---"}
+          {!isLoading && (showBalance ? `$${Math.abs(data?.balance || 0).toLocaleString("en-US")} ` : `$---`)}
 
           {!isLoading &&
             (showBalance ? (
-              <Eye
-                className="ml-2 inline-block cursor-pointer"
-                onClick={() => setShowBalance(!showBalance)}
-                size={18}
-              />
+              <Eye className="inline-block cursor-pointer" onClick={() => setShowBalance(!showBalance)} size={18} />
             ) : (
-              <EyeOff
-                className="ml-3 inline-block cursor-pointer"
-                onClick={() => setShowBalance(!showBalance)}
-                size={18}
-              />
+              <EyeOff className="inline-block cursor-pointer" onClick={() => setShowBalance(!showBalance)} size={18} />
             ))}
         </h2>
       </CardContent>

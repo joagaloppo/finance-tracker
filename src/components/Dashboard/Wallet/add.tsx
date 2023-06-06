@@ -10,6 +10,7 @@ import { DatePicker } from "@/components/ui/datepicker";
 import { set } from "date-fns";
 import { DollarSign, Text, Clock, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import Spinner from "@/components/ui/spinner";
 
 export default function AddTransaction() {
   const [open, setOpen] = useState<boolean>(false);
@@ -46,7 +47,7 @@ export default function AddTransaction() {
       resetInputs();
       setOpen(false);
       void ctx.transaction.getTen.invalidate();
-      void ctx.wallet.getBalance.invalidate();
+      void ctx.wallet.getInfo.invalidate();
     },
     onError: (e) => {
       const errorMessage = e.data?.zodError?.fieldErrors.content;
@@ -192,7 +193,7 @@ export default function AddTransaction() {
                       })
                     }
                   >
-                    {isLoading ? "Loading..." : "Accept"}
+                    {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Accept"}
                   </Button>
                 </div>
 

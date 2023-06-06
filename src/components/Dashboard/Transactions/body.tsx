@@ -2,6 +2,7 @@ import { useWalletStore } from "@/app/walletStore";
 import { api } from "@/utils/api";
 import { useEffect } from "react";
 import Edit from "./edit";
+import Spinner from "@/components/ui/spinner";
 
 const Body = () => {
   const walletId = useWalletStore((state) => state.walletId);
@@ -20,7 +21,7 @@ const Body = () => {
           {isLoading && (
             <div className="w-full bg-white">
               <div className="overflow-hidden whitespace-nowrap px-4 py-14 text-center text-sm text-gray-800">
-                <span className="text-center">Loading...</span>
+                <Spinner theme="dark" />
               </div>
             </div>
           )}
