@@ -1,27 +1,34 @@
+import { usePageStore } from "@/app/pageStore";
+import { cn } from "@/lib/utils";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const Footer = () => {
+const Paginator = () => {
+  const count = usePageStore((state) => state.count);
+  const pages = Math.ceil(count / 10);
+
+  const page = usePageStore((state) => state.page);
+  const setPage = usePageStore((state) => state.setPage);
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
+
   return (
-      <nav className="flex gap-2 text-slate-500 p-2">
-        <Button variant="ghost" size="sm">
-          <span aria-hidden="true">«</span>
-          <span className="sr-only">Previous</span>
+    <div className="flex w-full items-center justify-end gap-2 px-4 py-2">
+      <Button size="sm" variant="ghost" disabled={page === 1} onClick={() => handlePageChange(page - 1)}>
+        <ArrowLeft className="h-4 w-4" />
+      </Button>
+      {Array.from(Array(pages).keys()).map((i) => (
+        <Button key={i} size="sm" variant="ghost" disabled={i + 1 === page} onClick={() => handlePageChange(i + 1)}>
+          {i + 1}
         </Button>
-        <Button variant="ghost" size="sm">
-          <span className="text-sm">1</span>
-        </Button>
-        <Button variant="ghost" size="sm">
-          <span className="text-sm">2</span>
-        </Button>
-        <Button variant="ghost" size="sm">
-          <span className="text-sm">3</span>
-        </Button>
-        <Button variant="ghost" size="sm">
-          <span className="sr-only">Next</span>
-          <span aria-hidden="true">»</span>
-        </Button>
-      </nav>
+      ))}
+      <Button size="sm" variant="ghost" disabled={page === pages} onClick={() => handlePageChange(page + 1)}>
+        <ArrowRight className="h-4 w-4" />
+      </Button>
+    </div>
   );
 };
 
-export default Footer;
+export default Paginator;

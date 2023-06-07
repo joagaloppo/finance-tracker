@@ -5,12 +5,21 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import Add from "@/components/Dashboard/Wallet/add";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePageStore } from "@/app/pageStore";
 
 const Cardy = () => {
-  const walletId = useWalletStore((state) => state.walletId);
   const [showBalance, setShowBalance] = useState(true);
+  const walletId = useWalletStore((state) => state.walletId);
+  const setTransactionCount = usePageStore((state) => state.setCount);
+
   const { data, isLoading } = api.wallet.getInfo.useQuery({ walletId });
+
+  useEffect(() => {
+    if (data?.count) {
+      setTransactionCount(data.count);
+    }
+  }, [data?.count, setTransactionCount]);
 
   return (
     <Card>

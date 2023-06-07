@@ -3,10 +3,11 @@ import { z } from "zod";
 import { createTRPCRouter, privateProcedure, publicProcedure } from "@/server/api/trpc";
 
 export const transactionRouter = createTRPCRouter({
-  getTen: publicProcedure.input(z.object({ walletId: z.number() })).query(async ({ ctx, input }) => {
+  getTen: publicProcedure.input(z.object({ walletId: z.number(), skip: z.number() })).query(async ({ ctx, input }) => {
     return ctx.prisma.transaction.findMany({
       where: { walletId: input.walletId },
       take: 10,
+      skip: input.skip,
       orderBy: { date: "desc" },
     });
   }),
