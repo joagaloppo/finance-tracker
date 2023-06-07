@@ -7,18 +7,27 @@ export const walletRouter = createTRPCRouter({
   getAll: privateProcedure.query(({ ctx }) => {
     return ctx.prisma.wallet.findMany({ where: { ownerId: ctx.userId } });
   }),
-  getInfo: privateProcedure.input(z.object({ walletId: z.number() })).query(async ({ ctx, input }) => {
-    const wallet = await ctx.prisma.wallet.findUnique({ where: { id: input.walletId } });
-    if (!wallet) throw new Error("Wallet not found");
+  getInfo: privateProcedure
+    .input(
+      z.object({
+        walletId: z.number(),
+        search: z.string().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const wallet = await ctx.prisma.wallet.findUnique({ where: { id: input.walletId } });
+      if (!wallet) throw new Error("Wallet not found");
 
-    const count = await ctx.prisma.transaction.count({ where: { walletId: input.walletId } });
+      const count = await ctx.prisma.transaction.count({
+        where: { walletId: input.walletId, description: { contains: input.search } },
+      });
 
-    const balance = await ctx.prisma.transaction
-      .aggregate({ where: { walletId: input.walletId }, _sum: { amount: true } })
-      .then((res) => res._sum.amount ?? 0);
+      const balance = await ctx.prisma.transaction
+        .aggregate({ where: { walletId: input.walletId }, _sum: { amount: true } })
+        .then((res) => res._sum.amount ?? 0);
 
-    return { count, balance, wallet };
-  }),
+      return { count, balance, wallet };
+    }),
   create: privateProcedure
     .input(
       z.object({

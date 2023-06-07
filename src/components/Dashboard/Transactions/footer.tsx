@@ -1,9 +1,8 @@
 import { usePageStore } from "@/app/pageStore";
-import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const Paginator = () => {
+const Pagination = () => {
   const count = usePageStore((state) => state.count);
   const pages = Math.ceil(count / 10);
 
@@ -31,4 +30,4 @@ const Paginator = () => {
   );
 };
 
-export default Paginator;
+export default Pagination;

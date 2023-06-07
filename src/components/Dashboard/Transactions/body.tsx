@@ -4,6 +4,7 @@ import { useWalletStore } from "@/app/walletStore";
 import { usePageStore } from "@/app/pageStore";
 import Edit from "./edit";
 import Spinner from "@/components/ui/spinner";
+import { useSearchStore } from "@/app/searchStore";
 
 const Body = () => {
   const walletId = useWalletStore((state) => state.walletId);
@@ -11,9 +12,10 @@ const Body = () => {
   const transactions = useWalletStore((state) => state.transactions);
   const setTransactions = useWalletStore((state) => state.setTransactions);
 
+  const search = useSearchStore((state) => state.search);
   const page = usePageStore((state) => state.page);
 
-  const { data, isLoading } = api.transaction.getTen.useQuery({ walletId, skip: page * 10 - 10 });
+  const { data, isLoading } = api.transaction.getTen.useQuery({ walletId, skip: page * 10 - 10, search });
 
   useEffect(() => {
     setTransactions(data || []);

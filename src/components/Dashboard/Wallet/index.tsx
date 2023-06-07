@@ -7,13 +7,16 @@ import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePageStore } from "@/app/pageStore";
+import { useSearchStore } from "@/app/searchStore";
 
 const Cardy = () => {
   const [showBalance, setShowBalance] = useState(true);
+
+  const search = useSearchStore((state) => state.search);
   const walletId = useWalletStore((state) => state.walletId);
   const setTransactionCount = usePageStore((state) => state.setCount);
 
-  const { data, isLoading } = api.wallet.getInfo.useQuery({ walletId });
+  const { data, isLoading } = api.wallet.getInfo.useQuery({ walletId, search });
 
   useEffect(() => {
     if (data?.count) {
