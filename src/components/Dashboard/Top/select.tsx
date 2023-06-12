@@ -29,7 +29,7 @@ export default function SelectWallet() {
           className="w-[200px] justify-between sm:w-[200px]"
         >
           {value && wallets.find((w) => w.name.toLowerCase() === value)?.name}
-          <ChevronsUpDown className="ml-2 h-4 w-4" />
+          <ChevronsUpDown className="ml-2 h-4 w-4 text-gray-600" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0 sm:w-[200px]">

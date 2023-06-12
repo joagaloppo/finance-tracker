@@ -1,6 +1,7 @@
 import { api } from "@/utils/api";
 import { useEffect } from "react";
 import { useWalletStore } from "@/app/walletStore";
+import { useTransactionStore } from "@/app/transactionStore";
 import { usePageStore } from "@/app/pageStore";
 import Edit from "./edit";
 import Spinner from "@/components/ui/spinner";
@@ -9,8 +10,8 @@ import { useSearchStore } from "@/app/searchStore";
 const Body = () => {
   const walletId = useWalletStore((state) => state.walletId);
 
-  const transactions = useWalletStore((state) => state.transactions);
-  const setTransactions = useWalletStore((state) => state.setTransactions);
+  const transactions = useTransactionStore((state) => state.transactions);
+  const setTransactions = useTransactionStore((state) => state.setTransactions);
 
   const search = useSearchStore((state) => state.search);
   const page = usePageStore((state) => state.page);

@@ -11,22 +11,24 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 
 interface DatePickerProps {
   date?: Date;
-  setDate: (day: Date | undefined) => void;
+  setDate: (date: Date | undefined) => void;
+  disabled?: boolean;
 }
 
-export function DatePicker({ date, setDate }: DatePickerProps) {
+export function DatePicker({ date, setDate, disabled = false }: DatePickerProps) {
   const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={() => setOpen(!open)}>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant={"outline"}
           className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
           onClick={() => setOpen(true)}
         >
           <CalendarIcon className="mr-2 h-4 w-4 text-slate-500" />
-          {date ? format(date, "PPP") : null}
+          {date ? format(date, "PP") : null}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
