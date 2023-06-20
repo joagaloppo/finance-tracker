@@ -1,9 +1,10 @@
-import { type NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, type NextPage } from "next";
 import Head from "next/head";
 
 import Nav from "@/components/Nav";
 import Content from "@/components/Landing";
 import Footer from "@/components/Footer";
+import { getServerAuthSession } from "@/server/auth";
 
 const Home: NextPage = () => {
   return (
@@ -19,6 +20,23 @@ const Home: NextPage = () => {
       <Footer />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const session = await getServerAuthSession(ctx);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 };
 
 export default Home;

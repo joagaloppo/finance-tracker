@@ -1,8 +1,9 @@
-import { type NextPage } from "next";
+import { GetServerSideProps, GetServerSidePropsContext, type NextPage } from "next";
 import Head from "next/head";
 
 import Nav from "@/components/Nav";
 import Content from "@/components/Dashboard";
+import { getServerAuthSession } from "@/server/auth";
 
 const Dashboard: NextPage = () => {
   return (
@@ -17,6 +18,23 @@ const Dashboard: NextPage = () => {
       <Content />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (ctx: GetServerSidePropsContext) => {
+  const session = await getServerAuthSession(ctx);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
 };
 
 export default Dashboard;

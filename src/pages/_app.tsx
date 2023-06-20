@@ -9,7 +9,7 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
   return (
     <>
       <Head>
-        {/* <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
         <meta name="application-name" content="PWA App" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -41,7 +41,7 @@ const MyApp: AppType<{ session: Session | null }> = ({ Component, pageProps: { s
         <meta property="og:description" content="Best PWA App in the world" />
         <meta property="og:site_name" content="PWA App" />
         <meta property="og:url" content="https://yourdomain.com" />
-        <meta property="og:image" content="https://yourdomain.com/icons/apple-touch-icon.png" /> */}
+        <meta property="og:image" content="https://yourdomain.com/icons/apple-touch-icon.png" />
       </Head>
 
       <SessionProvider session={session}>
