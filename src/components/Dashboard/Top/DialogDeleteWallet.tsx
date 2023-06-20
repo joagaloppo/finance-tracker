@@ -7,7 +7,7 @@ import { X } from "lucide-react";
 
 import { api } from "@/utils/api";
 import { cn } from "@/lib/utils";
-import { useTransactionStore } from "@/app/transactionStore";
+import { useWalletStore } from "@/app/walletStore";
 import { Button } from "@/components/ui/button";
 import Spinner from "@/components/ui/spinner";
 
@@ -19,10 +19,10 @@ interface Props {
 
 const Delete: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
   const [open, setOpen] = useState(false);
-  const ctx = api.useContext();
+  const { setWalletId, deleteWallet } = useWalletStore();
 
-  const { mutate, isLoading } = api.transaction.delete.useMutation({
-    onSuccess: () => handleSuccess(),
+  const { mutate, isLoading } = api.wallet.delete.useMutation({
+    onSuccess: (e) => handleSuccess(e.id),
     onError: (e) => handleError(e.data?.zodError?.fieldErrors.content),
     onSettled: () => {
       setOpen(false);
@@ -30,10 +30,9 @@ const Delete: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
     },
   });
 
-  const handleSuccess = () => {
-    useTransactionStore.getState().deleteTransaction(id);
-    void ctx.transaction.getTen.invalidate();
-    void ctx.wallet.getInfo.invalidate();
+  const handleSuccess = (id: number) => {
+    deleteWallet(id);
+    setWalletId(0);
   };
 
   const handleError = (msg?: Array<string>) => {
@@ -62,7 +61,7 @@ const Delete: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15, type: "just" }}
+                transition={{ duration: 0.15 }}
                 className="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm"
               />
             </Dialog.Overlay>
@@ -71,7 +70,7 @@ const Delete: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15, type: "just" }}
+                transition={{ duration: 0.15 }}
                 className="fixed left-1/2 top-[2vw] z-50 flex w-[96vw] max-w-lg -translate-x-1/2 flex-col gap-4 rounded-lg bg-white p-6 opacity-20 shadow-lg sm:top-1/2 sm:-translate-y-1/2"
               >
                 <div
@@ -79,7 +78,7 @@ const Delete: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
                 >
                   <Dialog.Title className="text-lg font-semibold leading-none tracking-tight">Delete</Dialog.Title>
                   <Dialog.Description className="text-sm text-muted-foreground">
-                    Are you sure you want to delete this transaction?
+                    Are you sure you want to delete this wallet?
                   </Dialog.Description>
                 </div>
 

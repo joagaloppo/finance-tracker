@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Settings, X, Hash, Text } from "lucide-react";
 import { type Wallet } from "@prisma/client";
-import DeleteWallet from "./delete";
+import DeleteWallet from "./DialogDeleteWallet";
 import Spinner from "@/components/ui/spinner";
 
 export default function EditWallet() {
@@ -99,7 +99,7 @@ export default function EditWallet() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15, type: "just" }}
+                transition={{ duration: 0.15 }}
               ></motion.div>
             </Dialog.Overlay>
             <Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()} asChild forceMount>
@@ -107,7 +107,7 @@ export default function EditWallet() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                transition={{ duration: 0.15, type: "just" }}
+                transition={{ duration: 0.15 }}
                 variants={variants}
                 className="fixed left-1/2 top-[2vw] z-50 flex w-[96vw] max-w-lg -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg sm:top-1/2"
               >
@@ -152,7 +152,7 @@ export default function EditWallet() {
                 </div>
 
                 <div className="flex flex-col gap-4 sm:flex-row sm:justify-end sm:gap-2 sm:space-x-2">
-                  <DeleteWallet setOpenParent={setOpen} />
+                  <DeleteWallet id={walletId} setOpenParent={setOpen} />
                   <Button
                     type="submit"
                     onClick={() =>

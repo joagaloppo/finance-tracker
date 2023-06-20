@@ -81,7 +81,7 @@ export default function AddWallet() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15, type: "just" }}
+                transition={{ duration: 0.15 }}
               ></motion.div>
             </Dialog.Overlay>
             <Dialog.Content asChild forceMount>
@@ -89,8 +89,7 @@ export default function AddWallet() {
                 initial="initial"
                 animate="animate"
                 exit="exit"
-                transition={{ duration: 0.15, type: "just" }}
-                variants={variants}
+                transition={{ duration: 0.15 }}
                 className="fixed left-1/2 top-[2vw] z-50 flex w-[96vw] max-w-lg -translate-y-1/2 flex-col gap-4 rounded-lg bg-white p-6 shadow-lg sm:top-1/2"
               >
                 <div className="flex flex-col space-y-1.5 text-left">

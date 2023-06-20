@@ -1,13 +1,13 @@
 import { api } from "@/utils/api";
 import { useWalletStore } from "@/app/walletStore";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-import Add from "@/components/Dashboard/Wallet/add";
 import { cn } from "@/lib/utils";
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { usePageStore } from "@/app/pageStore";
 import { useSearchStore } from "@/app/searchStore";
+import Edit from "../Transactions/DialogUpsertTransaction";
 
 const Cardy = () => {
   const [showBalance, setShowBalance] = useState(true);
@@ -57,7 +57,7 @@ const Cardy = () => {
         </h2>
       </CardContent>
       <CardFooter>
-        <Add />
+        <Edit />
       </CardFooter>
     </div>
   );

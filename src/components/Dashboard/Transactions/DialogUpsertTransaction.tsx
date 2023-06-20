@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { z } from "zod";
 import { Controller, useForm } from "react-hook-form";
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { DollarSign, X, ArrowRight, ArrowLeft } from "lucide-react";
@@ -15,13 +15,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DatePicker } from "@/components/ui/datepicker";
 import Spinner from "@/components/ui/spinner";
-import Delete from "./delete";
+import Delete from "./DialogDeleteTransaction";
+import { useWalletStore } from "@/app/walletStore";
 
 interface Form {
   type: boolean;
   description: string;
   amount: number;
-  date: Date;
+  date: Date | undefined;
   hours: number;
   minutes: number;
 }
@@ -33,7 +34,7 @@ const schema = z.object({
     .union([z.string(), z.number()])
     .transform(Number)
     .refine((v) => !isNaN(v) && v >= 0.01),
-  date: z.date(),
+  date: z.union([z.date(), z.undefined()]),
   hours: z
     .union([z.string(), z.number()])
     .transform(Number)
@@ -44,10 +45,26 @@ const schema = z.object({
     .refine((v) => !isNaN(v) && v >= 0 && v < 60),
 });
 
-const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
+const TransactionDialog: React.FC<{ transaction?: Transaction }> = ({ transaction }) => {
   const [open, setOpen] = useState(false);
   const ctx = api.useContext();
-  const { editTransaction } = useTransactionStore();
+  const { walletId } = useWalletStore();
+  const { upsertTransaction } = useTransactionStore();
+  const defaultValues = transaction
+    ? {
+        description: transaction.description || "",
+        amount: Math.abs(transaction.amount),
+        type: transaction.amount > 0,
+        date: transaction.date,
+        hours: transaction.date.getHours(),
+        minutes: transaction.date.getMinutes(),
+      }
+    : {
+        type: true,
+        date: new Date(),
+        hours: new Date().getHours(),
+        minutes: new Date().getMinutes(),
+      };
 
   const {
     register,
@@ -57,19 +74,9 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
     reset,
     watch,
     control,
-  } = useForm({
-    defaultValues: {
-      description: transaction.description || "",
-      amount: Math.abs(transaction.amount),
-      type: transaction.amount > 0,
-      date: transaction.date || new Date(),
-      hours: transaction.date?.getHours() || 0,
-      minutes: transaction.date?.getMinutes() || 0,
-    },
-    resolver: zodResolver(schema),
-  });
+  } = useForm({ defaultValues, resolver: zodResolver(schema) });
 
-  const { mutate, isLoading } = api.transaction.update.useMutation({
+  const { mutate, isLoading } = api.transaction.upsert.useMutation({
     onSuccess: (e) => handleSuccess(e),
     onError: (e) => handleError(e.data?.zodError?.fieldErrors.content),
     onSettled: () => setOpen(false),
@@ -78,19 +85,18 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
   const onSubmit = (data: Form): void => {
     const { description, type, hours, minutes } = data;
     const amount = type ? data.amount : -data.amount;
-    const date = set(data.date, { hours, minutes });
-    mutate({ description, amount, date, id: transaction.id });
+    const date = set(data.date || new Date(), { hours, minutes });
+    mutate({ description, amount, date, id: transaction?.id, walletId });
   };
 
-  const handleSuccess = (t: Transaction) => {
-    const { description, amount, date } = t;
-    editTransaction(transaction.id, { ...transaction, description, amount, date });
+  const handleSuccess = (transaction: Transaction) => {
+    upsertTransaction(transaction);
     void ctx.transaction.getTen.invalidate();
     void ctx.wallet.getInfo.invalidate();
   };
 
   const handleError = (msg?: Array<string>) => {
-    let res = "Failed to edit transaction! Please try again later.";
+    let res = "There was an error, please try again later.";
     if (Array.isArray(msg) && msg[0]) res = msg[0];
     console.error(res);
   };
@@ -98,14 +104,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
   const handleOpenChange = () => {
     if (isLoading) return;
     if (!open) {
-      reset({
-        description: transaction.description || "",
-        amount: Math.abs(transaction.amount),
-        type: transaction.amount > 0,
-        date: transaction.date || new Date(),
-        hours: transaction.date?.getHours() || 0,
-        minutes: transaction.date?.getMinutes() || 0,
-      });
+      reset(defaultValues);
     }
     setOpen((x) => !x);
   };
@@ -113,40 +112,46 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
-        <div className="flex w-full cursor-pointer gap-3 bg-white px-3 py-5 hover:bg-gray-100">
-          <div className="whitespace-nowrap text-sm text-gray-800">
-            <span className="inline-flex h-[46px] w-[46px] items-center justify-center rounded-full border border-gray-300">
-              {transaction.amount >= 0 ? (
-                <ArrowRight className="h-4 w-4 text-slate-400" />
-              ) : (
-                <ArrowLeft className="h-4 w-4 text-slate-400" />
-              )}
-            </span>
-          </div>
-          <div className="flex w-full flex-col justify-center overflow-hidden whitespace-nowrap text-sm text-gray-800">
-            <div className="flex flex-col gap-1 text-left">
-              <span className="text-md">{transaction.amount >= 0 ? "Received money" : "Paid money"}</span>
-              <span className="max-w-[30%] text-ellipsis text-xs font-light text-gray-400">
-                {transaction.description || "No description"}
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col justify-center whitespace-nowrap text-sm">
-            <div className="flex flex-col gap-1 text-right">
-              <span
-                className={cn(
-                  "font-semibold tracking-tight text-slate-600",
-                  transaction.amount >= 0 ? "text-green-700" : "text-red-700"
+        {transaction ? (
+          <div className="flex w-full cursor-pointer gap-3 bg-white px-3 py-5 hover:bg-gray-100">
+            <div className="whitespace-nowrap text-sm text-gray-800">
+              <span className="inline-flex h-[46px] w-[46px] items-center justify-center rounded-full border border-gray-300">
+                {transaction.amount >= 0 ? (
+                  <ArrowRight className="h-4 w-4 text-slate-400" />
+                ) : (
+                  <ArrowLeft className="h-4 w-4 text-slate-400" />
                 )}
-              >
-                {transaction.amount >= 0 ? "+" : "-"}${Math.abs(transaction.amount).toLocaleString("en-US")}
-              </span>
-              <span className="text-xs font-light tracking-tight text-gray-400">
-                {transaction.date.toLocaleDateString()}
               </span>
             </div>
+            <div className="flex w-full flex-col justify-center overflow-hidden whitespace-nowrap text-sm text-gray-800">
+              <div className="flex flex-col gap-1 text-left">
+                <span className="text-md">{transaction.amount >= 0 ? "Received money" : "Paid money"}</span>
+                <span className="max-w-[30%] text-ellipsis text-xs font-light text-gray-400">
+                  {transaction.description || "No description"}
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col justify-center whitespace-nowrap text-sm">
+              <div className="flex flex-col gap-1 text-right">
+                <span
+                  className={cn(
+                    "font-semibold tracking-tight text-slate-600",
+                    transaction.amount >= 0 ? "text-green-700" : "text-red-700"
+                  )}
+                >
+                  {transaction.amount >= 0 ? "+" : "-"}${Math.abs(transaction.amount).toLocaleString("en-US")}
+                </span>
+                <span className="text-xs font-light tracking-tight text-gray-400">
+                  {transaction.date.toLocaleDateString()}
+                </span>
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <Button variant="outline" size="sm" className="w-full">
+            Add transaction
+          </Button>
+        )}
       </Dialog.Trigger>
 
       <AnimatePresence>
@@ -157,7 +162,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15, type: "just" }}
+                transition={{ duration: 0.15 }}
                 className="fixed inset-0 z-10 bg-black/20 backdrop-blur-[2px]"
               />
             </Dialog.Overlay>
@@ -167,7 +172,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.15, type: "just" }}
+                transition={{ duration: 0.15 }}
                 className="fixed left-1/2 top-[2vw] z-20 flex w-[96vw] max-w-lg -translate-x-1/2 rounded-xl bg-white p-6 shadow-lg sm:top-1/2 sm:-translate-y-1/2"
               >
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
@@ -179,7 +184,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                       Transaction
                     </Dialog.Title>
                     <Dialog.Description className="text-sm text-muted-foreground">
-                      Edit transaction details.
+                      {transaction ? "Edit transaction details." : "Add a new transaction."}
                     </Dialog.Description>
                   </div>
 
@@ -187,6 +192,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                     <div>
                       <Input
                         className={cn(errors.description && "border-red-700/50 text-red-700")}
+                        placeholder="Describe your transaction"
                         disabled={isLoading}
                         spellCheck={false}
                         {...register("description")}
@@ -196,6 +202,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                       <div className="relative flex w-full items-center gap-2">
                         <Input
                           className={cn("pl-10", errors.amount && "border-red-700/50 text-red-700")}
+                          placeholder="Amount"
                           disabled={isLoading}
                           {...register("amount")}
                         />
@@ -258,6 +265,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                               "w-full rounded-none border-0 px-0 text-center disabled:opacity-100",
                               (errors.minutes || errors.hours) && "border-red-700/50 text-red-700"
                             )}
+                            placeholder="00"
                             maxLength={2}
                             {...register("hours")}
                           />
@@ -267,6 +275,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                               "w-full rounded-none border-0 px-0 text-center disabled:opacity-100",
                               (errors.minutes || errors.hours) && "border-red-700/50 text-red-700"
                             )}
+                            placeholder="00"
                             maxLength={2}
                             {...register("minutes")}
                           />
@@ -276,7 +285,7 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
                   </div>
 
                   <div className="flex flex-col gap-4 sm:flex-row sm:justify-end sm:gap-2 sm:space-x-2">
-                    <Delete id={transaction.id} setOpenParent={setOpen} disabled={isLoading} />
+                    {transaction && <Delete id={transaction.id} setOpenParent={setOpen} disabled={isLoading} />}
                     <Button type="submit" disabled={isLoading}>
                       {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Save"}
                     </Button>
@@ -299,4 +308,4 @@ const Edit: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
   );
 };
 
-export default Edit;
+export default TransactionDialog;

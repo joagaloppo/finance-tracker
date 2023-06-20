@@ -1,21 +1,17 @@
 import { api } from "@/utils/api";
 import { useEffect } from "react";
-import { useWalletStore } from "@/app/walletStore";
 import { useTransactionStore } from "@/app/transactionStore";
-import { usePageStore } from "@/app/pageStore";
-import Edit from "./edit";
-import Spinner from "@/components/ui/spinner";
+import { useWalletStore } from "@/app/walletStore";
 import { useSearchStore } from "@/app/searchStore";
+import { usePageStore } from "@/app/pageStore";
+import Spinner from "@/components/ui/spinner";
+import Edit from "./DialogUpsertTransaction";
 
 const Body = () => {
   const walletId = useWalletStore((state) => state.walletId);
-
-  const transactions = useTransactionStore((state) => state.transactions);
-  const setTransactions = useTransactionStore((state) => state.setTransactions);
-
-  const search = useSearchStore((state) => state.search);
-  const page = usePageStore((state) => state.page);
-
+  const { transactions, setTransactions } = useTransactionStore();
+  const { search } = useSearchStore();
+  const { page } = usePageStore();
   const { data, isLoading } = api.transaction.getTen.useQuery({ walletId, skip: page * 10 - 10, search });
 
   useEffect(() => {

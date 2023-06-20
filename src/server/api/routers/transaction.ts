@@ -55,6 +55,39 @@ export const transactionRouter = createTRPCRouter({
 
       return transaction;
     }),
+  upsert: privateProcedure
+    .input(
+      z.object({
+        id: z.number().optional(),
+        description: z.string(),
+        amount: z.number(),
+        date: z.date(),
+        walletId: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      if (input.id != null) {
+        const transaction = await ctx.prisma.transaction.update({
+          where: { id: input.id },
+          data: {
+            description: input.description,
+            amount: input.amount,
+            date: input.date,
+          },
+        });
+        return transaction;
+      } else {
+        const transaction = await ctx.prisma.transaction.create({
+          data: {
+            description: input.description,
+            amount: input.amount,
+            date: input.date,
+            walletId: input.walletId,
+          },
+        });
+        return transaction;
+      }
+    }),
   delete: privateProcedure.input(z.object({ id: z.number() })).mutation(async ({ ctx, input }) => {
     const transaction = await ctx.prisma.transaction.delete({
       where: { id: input.id },
