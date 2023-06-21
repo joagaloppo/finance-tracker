@@ -191,7 +191,9 @@ const TransactionDialog: React.FC<{ transaction?: Transaction }> = ({ transactio
                   <div className="grid gap-4 py-4">
                     <div>
                       <Input
-                        className={cn(errors.description && "border-red-700/50 text-red-700")}
+                        className={cn(
+                          errors.description && "border-red-700/50 text-red-700 placeholder:text-red-700/70"
+                        )}
                         placeholder="Describe your transaction"
                         disabled={isLoading}
                         spellCheck={false}
@@ -201,7 +203,10 @@ const TransactionDialog: React.FC<{ transaction?: Transaction }> = ({ transactio
                     <div>
                       <div className="relative flex w-full items-center gap-2">
                         <Input
-                          className={cn("pl-10", errors.amount && "border-red-700/50 text-red-700")}
+                          className={cn(
+                            "pl-10",
+                            errors.amount && "border-red-700/50 text-red-700 placeholder:text-red-700/70"
+                          )}
                           placeholder="Amount"
                           disabled={isLoading}
                           {...register("amount")}
@@ -263,7 +268,8 @@ const TransactionDialog: React.FC<{ transaction?: Transaction }> = ({ transactio
                             disabled={isLoading}
                             className={cn(
                               "w-full rounded-none border-0 px-0 text-center disabled:opacity-100",
-                              (errors.minutes || errors.hours) && "border-red-700/50 text-red-700"
+                              (errors.minutes || errors.hours) &&
+                                "border-red-700/50 text-red-700 placeholder:text-red-700/70"
                             )}
                             placeholder="00"
                             maxLength={2}
@@ -273,7 +279,8 @@ const TransactionDialog: React.FC<{ transaction?: Transaction }> = ({ transactio
                             disabled={isLoading}
                             className={cn(
                               "w-full rounded-none border-0 px-0 text-center disabled:opacity-100",
-                              (errors.minutes || errors.hours) && "border-red-700/50 text-red-700"
+                              (errors.minutes || errors.hours) &&
+                                "border-red-700/50 text-red-700 placeholder:text-red-700/70"
                             )}
                             placeholder="00"
                             maxLength={2}

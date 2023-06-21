@@ -6,12 +6,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Currency } from "@prisma/client";
 
-interface SelectCurrencyProps {
-  value: string;
-  setValue: (value: string) => void;
-}
-
-export default function SelectCurrency({ value, setValue }: SelectCurrencyProps) {
+export const SelectorCurrency: React.FC<{ value: string; setValue: (v: string) => void }> = ({ value, setValue }) => {
   const [open, setOpen] = useState(false);
   const currencies = Object.values(Currency);
 
@@ -50,4 +45,4 @@ export default function SelectCurrency({ value, setValue }: SelectCurrencyProps)
       </PopoverContent>
     </Popover>
   );
-}
+};

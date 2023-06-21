@@ -6,7 +6,7 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useWalletStore } from "@/app/walletStore";
 
-export default function SelectWallet() {
+export const SelectorWallet: React.FC = () => {
   const wallets = useWalletStore((state) => state.wallets);
   const walletId = useWalletStore((state) => state.walletId);
   const setWalletId = useWalletStore((state) => state.setWalletId);
@@ -57,4 +57,4 @@ export default function SelectWallet() {
       </PopoverContent>
     </Popover>
   );
-}
+};

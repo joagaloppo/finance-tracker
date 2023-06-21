@@ -28,46 +28,37 @@ export const walletRouter = createTRPCRouter({
 
       return { count, balance, wallet };
     }),
-  create: privateProcedure
+  upsert: privateProcedure
     .input(
       z.object({
+        id: z.number().optional(),
         name: z.string(),
-        description: z.string(),
-        currency: z.string(),
+        description: z.string().optional(),
+        currency: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const transaction = await ctx.prisma.wallet.create({
-        data: {
-          name: input.name,
-          description: input.description,
-          currency: Currency[input.currency as keyof typeof Currency],
-          ownerId: ctx.userId,
-        },
-      });
-
-      return transaction;
-    }),
-  edit: privateProcedure
-    .input(
-      z.object({
-        id: z.number(),
-        name: z.optional(z.string()),
-        description: z.optional(z.string()),
-        currency: z.optional(z.string()),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const transaction = await ctx.prisma.wallet.update({
-        where: { id: input.id },
-        data: {
-          name: input.name,
-          description: input.description,
-          currency: Currency[input.currency as keyof typeof Currency],
-        },
-      });
-
-      return transaction;
+      if (input.id != null) {
+        const wallet = await ctx.prisma.wallet.update({
+          where: { id: input.id },
+          data: {
+            name: input.name,
+            description: input.description,
+            currency: Currency[input.currency as keyof typeof Currency],
+          },
+        });
+        return wallet;
+      } else {
+        const wallet = await ctx.prisma.wallet.create({
+          data: {
+            ownerId: ctx.userId,
+            name: input.name,
+            description: input.description,
+            currency: Currency[input.currency as keyof typeof Currency],
+          },
+        });
+        return wallet;
+      }
     }),
   delete: privateProcedure
     .input(

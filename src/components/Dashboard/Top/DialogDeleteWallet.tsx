@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -17,7 +15,7 @@ interface Props {
   setOpenParent: (o: boolean) => void;
 }
 
-const Delete: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
+export const DialogDeleteWallet: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
   const [open, setOpen] = useState(false);
   const { setWalletId, deleteWallet } = useWalletStore();
 
@@ -106,5 +104,3 @@ const Delete: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
     </Dialog.Root>
   );
 };
-
-export default Delete;

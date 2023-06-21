@@ -3,12 +3,10 @@ import { ArrowRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Pagination = () => {
-  const count = usePageStore((state) => state.count);
+  const { count, page } = usePageStore();
   const pages = Math.ceil(count / 10);
 
-  const page = usePageStore((state) => state.page);
   const setPage = usePageStore((state) => state.setPage);
-
   const handlePageChange = (page: number) => {
     setPage(page);
   };

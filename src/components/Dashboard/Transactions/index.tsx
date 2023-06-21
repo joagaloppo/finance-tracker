@@ -1,6 +1,6 @@
-import Search from "./header";
-import Body from "./body";
-import Pagination from "./footer";
+import Search from "./TableTransactionsSearch";
+import Body from "./TableTransactionsBody";
+import Pagination from "./TableTransactionsPagination";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
 export default function Table() {

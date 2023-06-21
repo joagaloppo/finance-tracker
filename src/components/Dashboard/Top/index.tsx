@@ -2,14 +2,12 @@ import { api } from "@/utils/api";
 import { useEffect } from "react";
 import { useWalletStore } from "@/app/walletStore";
 
-import Select from "./select";
-import Add from "./add";
-import Edit from "./edit";
+import { SelectorWallet } from "./SelectorWallet";
+import { DialogUpsertWallet } from "./DialogUpsertWallet";
 
 const Top = () => {
   const { data, isLoading } = api.wallet.getAll.useQuery();
-  const setWallets = useWalletStore((state) => state.setWallets);
-  const setWalletId = useWalletStore((state) => state.setWalletId);
+  const { wallets, walletId, setWallets, setWalletId } = useWalletStore();
 
   useEffect(() => {
     if (data) {
@@ -25,10 +23,10 @@ const Top = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <Select />
+      <SelectorWallet />
       <div className="flex gap-2">
-        <Add />
-        <Edit />
+        <DialogUpsertWallet />
+        <DialogUpsertWallet wallet={wallets.find((wallet) => wallet.id === walletId)} />
       </div>
     </div>
   );

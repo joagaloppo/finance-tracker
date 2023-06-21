@@ -44,7 +44,7 @@ const Cardy = () => {
             isLoading && "animate-pulse opacity-80"
           )}
         >
-          {data?.balance && data.balance < 0 ? "-" : ""}
+          {showBalance && data?.balance && data.balance < 0 ? "-" : ""}
           {isLoading && "$---"}
           {!isLoading && (showBalance ? `$${Math.abs(data?.balance || 0).toLocaleString("en-US")} ` : `$---`)}
 
