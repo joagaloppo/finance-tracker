@@ -31,16 +31,16 @@ export const walletRouter = createTRPCRouter({
   upsert: privateProcedure
     .input(
       z.object({
-        id: z.number().optional(),
+        walletId: z.number().optional(),
         name: z.string(),
         description: z.string().optional(),
         currency: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (input.id != null) {
+      if (input.walletId != null) {
         const wallet = await ctx.prisma.wallet.update({
-          where: { id: input.id },
+          where: { id: input.walletId },
           data: {
             name: input.name,
             description: input.description,

@@ -6,7 +6,6 @@ interface TransactionState {
   setTransactions: (transactions: Transaction[]) => void;
   deleteTransaction: (id: number) => void;
   upsertTransaction: (transaction: Transaction) => void;
-
   transactionId: number;
   setTransactionId: (id: number) => void;
 }

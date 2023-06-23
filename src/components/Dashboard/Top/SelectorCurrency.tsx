@@ -27,7 +27,7 @@ export const SelectorCurrency: React.FC<{ value: string; setValue: (v: string) =
         <Command>
           <CommandInput placeholder="Search" maxLength={3} />
           <CommandEmpty>Not found.</CommandEmpty>
-          <CommandGroup>
+          <CommandGroup className="max-h-[200px] overflow-y-auto">
             {currencies.map((c, i) => (
               <CommandItem
                 key={i}

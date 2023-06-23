@@ -30,7 +30,7 @@ const schema = z.object({
 
 export const DialogUpsertWallet: React.FC<{ wallet?: Wallet }> = ({ wallet }) => {
   const [open, setOpen] = useState(false);
-  const { upsertWallet, setWalletId } = useWalletStore();
+  const { upsertWallet, walletId, setWalletId } = useWalletStore();
   const defaultValues = wallet
     ? { name: wallet.name, description: wallet.description || "", currency: wallet.currency }
     : { name: "", description: "", currency: "usd" };
@@ -52,7 +52,7 @@ export const DialogUpsertWallet: React.FC<{ wallet?: Wallet }> = ({ wallet }) =>
   const onSubmit = (data: Form): void => {
     const { name, description } = data;
     const currency = data.currency.toUpperCase();
-    mutate({ name, description, currency });
+    mutate({ walletId, name, description, currency });
   };
 
   const handleSuccess = (data: Wallet): void => {
@@ -109,7 +109,7 @@ export const DialogUpsertWallet: React.FC<{ wallet?: Wallet }> = ({ wallet }) =>
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="fixed left-1/2 top-[2vw] z-20 flex w-[96vw] max-w-lg -translate-x-1/2 rounded-xl bg-white p-6 shadow-lg sm:top-1/2 sm:-translate-y-1/2"
+                className="fixed left-1/2 top-[2vw] z-20 flex w-[96vw] max-w-lg -translate-x-1/2 rounded-lg bg-white p-6 shadow-lg sm:top-1/2 sm:-translate-y-1/2"
               >
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
@@ -182,7 +182,7 @@ export const DialogUpsertWallet: React.FC<{ wallet?: Wallet }> = ({ wallet }) =>
                     </div>
                   </div>
 
-                  <div className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:justify-end">
                     {wallet && <DialogDeleteWallet id={wallet.id} setOpenParent={setOpen} disabled={isLoading} />}
                     <Button type="submit" disabled={isLoading}>
                       {isLoading ? <Spinner theme="light" className="h-5 px-4" /> : "Save"}

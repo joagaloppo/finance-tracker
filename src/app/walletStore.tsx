@@ -4,10 +4,8 @@ import { create } from "zustand";
 interface WalletState {
   wallets: Wallet[];
   setWallets: (wallets: Wallet[]) => void;
-  addWallet: (wallet: Wallet) => void;
   deleteWallet: (id: number) => void;
   upsertWallet: (wallet: Wallet) => void;
-
   walletId: number;
   balance: number;
   setWalletId: (id: number) => void;
@@ -17,7 +15,6 @@ interface WalletState {
 export const useWalletStore = create<WalletState>()((set) => ({
   wallets: [],
   setWallets: (wallets: Wallet[]) => set(() => ({ wallets })),
-  addWallet: (wallet: Wallet) => set((state) => ({ wallets: [...state.wallets, wallet] })),
   upsertWallet: (newWallet) =>
     set((state) => {
       const exists = state.wallets.some((wallet) => wallet.id === newWallet.id);
@@ -30,7 +27,6 @@ export const useWalletStore = create<WalletState>()((set) => ({
       }
     }),
   deleteWallet: (id: number) => set((state) => ({ wallets: state.wallets.filter((t) => t.id !== id) })),
-
   walletId: 0,
   balance: 0,
   setWalletId: (id: number) => set(() => ({ walletId: id })),

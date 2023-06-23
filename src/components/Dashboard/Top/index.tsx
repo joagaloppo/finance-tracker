@@ -1,9 +1,9 @@
 import { api } from "@/utils/api";
 import { useEffect } from "react";
 import { useWalletStore } from "@/app/walletStore";
-
 import { SelectorWallet } from "./SelectorWallet";
 import { DialogUpsertWallet } from "./DialogUpsertWallet";
+import Spinner from "@/components/ui/spinner";
 
 const Top = () => {
   const { data, isLoading } = api.wallet.getAll.useQuery();
@@ -16,18 +16,20 @@ const Top = () => {
     }
   }, [data, setWallets, setWalletId]);
 
-  if (isLoading) return <div />;
-
-  // You have no wallets:
-  // if (!isLoading && !data) return <div />;
-
-  return (
-    <div className="flex items-center gap-2">
-      <SelectorWallet />
+  if (!isLoading && wallets && !wallets.length)
+    return (
       <div className="flex gap-2">
         <DialogUpsertWallet />
-        <DialogUpsertWallet wallet={wallets.find((wallet) => wallet.id === walletId)} />
       </div>
+    );
+
+  if (isLoading) return <Spinner theme="dark" />;
+
+  return (
+    <div className="flex gap-2">
+      <SelectorWallet />
+      <DialogUpsertWallet />
+      <DialogUpsertWallet wallet={wallets.find((wallet) => wallet.id === walletId)} />
     </div>
   );
 };

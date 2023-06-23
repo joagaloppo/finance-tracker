@@ -173,7 +173,7 @@ const TransactionDialog: React.FC<{ transaction?: Transaction }> = ({ transactio
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="fixed left-1/2 top-[2vw] z-20 flex w-[96vw] max-w-lg -translate-x-1/2 rounded-xl bg-white p-6 shadow-lg sm:top-1/2 sm:-translate-y-1/2"
+                className="fixed left-1/2 top-[2vw] z-20 flex w-[96vw] max-w-lg -translate-x-1/2 rounded-lg bg-white p-6 shadow-lg sm:top-1/2 sm:-translate-y-1/2"
               >
                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                 <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">

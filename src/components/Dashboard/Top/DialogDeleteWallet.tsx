@@ -17,7 +17,7 @@ interface Props {
 
 export const DialogDeleteWallet: React.FC<Props> = ({ id, disabled = false, setOpenParent }) => {
   const [open, setOpen] = useState(false);
-  const { setWalletId, deleteWallet } = useWalletStore();
+  const { wallets, setWalletId, deleteWallet } = useWalletStore();
 
   const { mutate, isLoading } = api.wallet.delete.useMutation({
     onSuccess: (e) => handleSuccess(e.id),
@@ -29,8 +29,8 @@ export const DialogDeleteWallet: React.FC<Props> = ({ id, disabled = false, setO
   });
 
   const handleSuccess = (id: number) => {
+    setWalletId(wallets[0]?.id || 0);
     deleteWallet(id);
-    setWalletId(0);
   };
 
   const handleError = (msg?: Array<string>) => {

@@ -29,7 +29,7 @@ const Cardy = () => {
       <CardHeader>
         <div className="flex items-center gap-2">
           <CardTitle>Available balance</CardTitle>
-          <span className="w-fit rounded-2xl bg-blue-800/60 px-[6px] text-[10px] tracking-tight text-white">
+          <span className="w-fit rounded-md bg-gray-800/80 px-[6px] py-[1px] text-[8px] tracking-tight text-white">
             {data?.wallet?.currency ? `${data.wallet.currency}` : null}
           </span>
         </div>

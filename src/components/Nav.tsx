@@ -1,6 +1,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "./ui/button";
 import { type Session } from "next-auth";
+import { useState } from "react";
+import Spinner from "./ui/spinner";
 
 const Nav: React.FC = () => {
   const { data: sessionData } = useSession();
@@ -29,8 +31,20 @@ const Logo: React.FC = () => {
 };
 
 const Auth: React.FC<{ sessionData: Session | null }> = ({ sessionData }) => {
+  const [loading, setLoading] = useState(false);
+
+  const onSignOut = () => {
+    setLoading(true);
+    void signOut();
+  };
+
+  const onSignIn = () => {
+    setLoading(true);
+    void signIn("google");
+  };
+
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center gap-2">
       {sessionData !== null && (
         <img
           src={sessionData?.user?.image || "/profile.jpg"}
@@ -40,8 +54,13 @@ const Auth: React.FC<{ sessionData: Session | null }> = ({ sessionData }) => {
         />
       )}
 
-      <Button variant="outline" size="sm" onClick={sessionData ? () => void signOut() : () => void signIn("google")}>
-        {sessionData ? "Sign out" : "Sign in"}
+      <Button
+        disabled={loading}
+        variant="outline"
+        size="sm"
+        onClick={sessionData ? () => onSignOut() : () => onSignIn()}
+      >
+        {loading ? <Spinner className="h-4 w-11" theme="dark" /> : sessionData ? "Sign out" : "Sign in"}
       </Button>
     </div>
   );
